@@ -1,10 +1,8 @@
 import { FC } from "react";
 import type { IPosts } from "../../../types/types";
-import Gallery from "react-photo-gallery";
 import styled from "styled-components";
 
 import { ButtonIcon } from "../../buttons/buttonIcon/ButtonIcon";
-// import { Gallery } from "../gallery/Gallery";
 
 import { colors } from "../../../utils/colors";
 import { icons } from "../../../assets/icons/icons";
@@ -102,9 +100,7 @@ export const Post: FC<IPostComp> = ({ post }) => {
         <p>{post.text}</p>
       </div>
 
-      <div className="gallery">
-        <Gallery photos={post.photos} />
-      </div>
+      <div className="gallery"></div>
 
       <div className="legs">
         <div className="legs_date">{post.date}</div>

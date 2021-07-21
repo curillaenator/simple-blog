@@ -35,14 +35,15 @@ const HeaderStyled = styled.header`
 
 interface IHeader {
   user: IUser;
+  signInWithGoogle: () => void;
 }
 
-const Header: FC<IHeader> = ({ user }) => {
+const Header: FC<IHeader> = ({ user, signInWithGoogle }) => {
   return (
     <HeaderStyled>
       <Logo image={logo} />
 
-      <User user={user} />
+      <User user={user} signInWithGoogle={signInWithGoogle}/>
     </HeaderStyled>
   );
 };

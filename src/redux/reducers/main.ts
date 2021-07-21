@@ -59,10 +59,11 @@ const setPosts: TAction<IPosts[]> = (payload) => ({
 // THUNKS
 
 export const initializeApp = (): TThunk => async (dispatch) => {
-  const posts = await api.getPosts();
+  const posts: IPosts[] = await api.getPosts();
+  const user: IUser = await api.isUserAuthed();
 
   batch(() => {
-    // dispatch(setUser(user));
+    dispatch(setUser(user));
     dispatch(setPosts(posts));
     dispatch(setInitialize(true));
   });

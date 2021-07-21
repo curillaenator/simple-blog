@@ -6,12 +6,14 @@ import PostList from "../../components/postlist";
 
 import type { TState } from "../../redux/store";
 
+import { signInWithGoogle } from "../../redux/reducers/main";
+
 type TBlog = ConnectedProps<typeof connector>;
 
-const Blog: FC<TBlog> = ({ posts, user }) => {
+const Blog: FC<TBlog> = ({ posts, user, signInWithGoogle }) => {
   return (
     <div className="page">
-      <Header user={user}/>
+      <Header user={user} signInWithGoogle={signInWithGoogle} />
       <PostList posts={posts} />;
     </div>
   );
@@ -22,7 +24,7 @@ const mstp = (state: TState) => ({
   user: state.main.user,
 });
 
-const mdtp = {};
+const mdtp = { signInWithGoogle };
 
 const connector = connect(mstp, mdtp);
 

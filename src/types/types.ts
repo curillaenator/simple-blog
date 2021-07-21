@@ -21,7 +21,6 @@ export interface IPosts {
   title: string;
   text: string;
   headPhoto: string;
-  photos: IPhoto[];
   date: string;
 }
 

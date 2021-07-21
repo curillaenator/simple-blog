@@ -4,37 +4,22 @@ import { auth, db } from "./firebase";
 import type { IPosts, IUser } from "../types/types";
 
 import image1 from "../assets/images/image1.jpg";
-import image2 from "../assets/images/image2.jpg";
+// import image2 from "../assets/images/image2.jpg";
 
 const text =
   "React (иногда React.js или ReactJS) — JavaScript-библиотека[4] с открытым исходным кодом для разработки пользовательских интерфейсов. React разрабатывается и поддерживается Facebook, Instagram и сообществом отдельных разработчиков и корпораций[5][6][7]. React может использоваться для разработки одностраничных и мобильных приложений. Его цель — предоставить высокую скорость, простоту и масштабируемость. В качестве библиотеки для разработки пользовательских интерфейсов React часто используется с другими библиотеками, такими как MobX, Redux и GraphQL[8].";
-
-const photos = [
-  { width: 1280, height: 853, src: image1 },
-  { width: 1280, height: 603, src: image2 },
-];
 
 const fakePosts: IPosts[] = new Array(3).fill(0).map((_, i) => ({
   id: `postid${i}`,
   title: `post #${i}`,
   text: text,
   headPhoto: image1,
-  photos: photos,
   date: "20 Июля 2021",
 }));
 
-const fakeUser = {
-  id: "user1",
-  username: "Самурай Нгуен",
-  avatar: image2,
-  role: "admin",
-};
+// FIREBASE API
 
 export const api = {
-  getUser(): Promise<IUser> {
-    return new Promise((resolve) => resolve(fakeUser));
-  },
-
   getPosts(): Promise<IPosts[]> {
     return new Promise((resolve) => resolve(fakePosts));
   },
@@ -53,6 +38,21 @@ export const api = {
 
       // @ts-ignore
       resolve(newUser);
+    });
+  },
+
+  isUserAuthed(): Promise<IUser> {
+    return new Promise((resolve) => {
+      auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          const userDB = await db.ref(`users/${user.uid}`).once("value");
+          return resolve(userDB.val());
+        }
+
+        if (!user) {
+          return resolve({ id: "", username: "", avatar: "", role: "guest" });
+        }
+      });
     });
   },
 
