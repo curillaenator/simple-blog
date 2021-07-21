@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import { TState } from "../redux/store";
 
@@ -24,11 +25,19 @@ export interface IPosts {
   date: string;
 }
 
+export interface IDropOption {
+  id: string;
+  icon: ReactNode;
+  title: string;
+  handler: () => void;
+}
+
 // REDUX & STATE
 
 export interface IInitialState {
   initialized: boolean;
   user: IUser;
+  usermenu: boolean;
   posts: IPosts[];
 }
 

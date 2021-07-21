@@ -3,12 +3,14 @@ import styled from "styled-components";
 
 import { User } from "./User";
 import { Logo } from "./Logo";
+import { Dropdown } from "../dropdown/Dropdown";
 
 import { colors } from "../../utils/colors";
 
+import { userMenu } from "../../fixedcontent/fixedcontent";
 import logo from "../../assets/images/logo.png";
 
-import type { IUser } from "../../types/types";
+import type { IUser, TAction } from "../../types/types";
 
 const HeaderStyled = styled.header`
   display: flex;
@@ -36,6 +38,7 @@ const HeaderStyled = styled.header`
 interface IHeader {
   user: IUser;
   signInWithGoogle: () => void;
+  setUserMenu: TAction<boolean>;
 }
 
 const Header: FC<IHeader> = ({ user, signInWithGoogle }) => {
@@ -43,7 +46,9 @@ const Header: FC<IHeader> = ({ user, signInWithGoogle }) => {
     <HeaderStyled>
       <Logo image={logo} />
 
-      <User user={user} signInWithGoogle={signInWithGoogle}/>
+      <Dropdown options={userMenu} mtop={4.2}>
+        <User user={user} signInWithGoogle={signInWithGoogle} />
+      </Dropdown>
     </HeaderStyled>
   );
 };

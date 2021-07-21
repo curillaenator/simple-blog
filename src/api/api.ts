@@ -1,6 +1,8 @@
 import firebase from "firebase/app";
 import { auth, db } from "./firebase";
 
+import { guest } from "../fixedcontent/fixedcontent";
+
 import type { IPosts, IUser } from "../types/types";
 
 import image1 from "../assets/images/image1.jpg";
@@ -50,7 +52,7 @@ export const api = {
         }
 
         if (!user) {
-          return resolve({ id: "", username: "", avatar: "", role: "guest" });
+          return resolve(guest);
         }
       });
     });

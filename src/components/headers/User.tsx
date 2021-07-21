@@ -1,4 +1,3 @@
-import { FC } from "react";
 import styled from "styled-components";
 
 import { ButtonGhost } from "../buttons/buttonGhost/ButtonGhost";
@@ -6,6 +5,7 @@ import { ButtonGhost } from "../buttons/buttonGhost/ButtonGhost";
 import { colors } from "../../utils/colors";
 
 import type { IUser } from "../../types/types";
+import type { FC, RefObject } from "react";
 
 interface IUserStyled {
   size: number;

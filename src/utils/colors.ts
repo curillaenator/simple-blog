@@ -4,7 +4,9 @@ export const colors = {
   fontGray: "#6f7888",
   fontWhite: "#ffffff",
 
+  successDark: "#799700",
   success: "#91b500",
+
   danger: "#e33b3b",
 
   backPrimary25: "#383c44b9",

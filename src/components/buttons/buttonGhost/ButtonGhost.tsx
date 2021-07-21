@@ -19,22 +19,33 @@ const StyledButton = styled.button<IStyledButton>`
     font-size: 1.05rem;
     color: ${({ color }) => color};
     transition: 0.08s linear;
+    white-space: nowrap;
   }
 
   & > svg {
     width: 18px;
     height: 18px;
+    fill: ${colors.backPrimary};
+    transition: 0.08s linear;
   }
 
   &:hover {
     .title {
-      transform: scale(1.2);
+      color: ${colors.success};
+    }
+
+    & > svg {
+      fill: ${colors.success};
     }
   }
 
   &:active {
     .title {
-      transform: scale(1);
+      color: ${colors.successDark};
+    }
+
+    & > svg {
+      fill: ${colors.successDark};
     }
   }
 `;
