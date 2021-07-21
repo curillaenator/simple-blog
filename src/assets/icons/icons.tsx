@@ -1,4 +1,35 @@
 export const icons = {
+  loader: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      style={{
+        margin: "auto",
+        background: "none",
+        display: "block",
+        shapeRendering: "auto",
+      }}
+      width="200px"
+      height="200px"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="xMidYMid"
+    >
+      <g transform="translate(50,50)">
+        <g transform="scale(0.7)">
+          <circle cx="0" cy="0" r="50" fill="#383c44"></circle>
+          <circle cx="0" cy="-16" r="15" fill="#ffffff">
+            <animateTransform
+              attributeName="transform"
+              type="rotate"
+              dur="1.639344262295082s"
+              repeatCount="indefinite"
+              keyTimes="0;1"
+              values="0 0 0;360 0 0"
+            ></animateTransform>
+          </circle>
+        </g>
+      </g>
+    </svg>
+  ),
   pencil: (
     <svg
       xmlns="http://www.w3.org/2000/svg"

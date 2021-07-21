@@ -5,7 +5,8 @@ import styled from "styled-components";
 
 import { initializeApp } from "../../redux/reducers/main";
 
-import BlogPage from "../../pages/blog/BlogPage";
+import BlogPage from "../../pages/blog";
+import ProfilePage from "../../pages/profile";
 
 import { colors } from "../../utils/colors";
 
@@ -29,6 +30,7 @@ const App: FC = () => {
     <AppContainer>
       <Switch>
         <Route exact path="/" render={() => <BlogPage />} />
+        <Route path="profile/:id?" render={() => <ProfilePage />} />
       </Switch>
     </AppContainer>
   );

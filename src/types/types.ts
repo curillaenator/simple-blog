@@ -27,7 +27,7 @@ export interface IPosts {
 // REDUX & STATE
 
 export interface IInitialState {
-  initialize: boolean;
+  initialized: boolean;
   user: IUser;
   posts: IPosts[];
 }

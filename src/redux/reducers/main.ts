@@ -15,7 +15,7 @@ const SET_CURRENT_USER = "main/SET_CURRENT_USER";
 const SET_POSTS = "main/SET_POSTS";
 
 const initialState: IInitialState = {
-  initialize: false,
+  initialized: false,
   user: { id: "", username: "", avatar: "", role: "guest" },
   posts: [],
 };
@@ -26,7 +26,7 @@ export const main: Reducer<IInitialState, AnyAction> = (
 ) => {
   switch (action.type) {
     case SET_INITIALIZE:
-      return { ...state, initialize: action.payload };
+      return { ...state, initialized: action.payload };
 
     case SET_CURRENT_USER:
       return { ...state, user: action.payload };
@@ -59,8 +59,8 @@ const setPosts: TAction<IPosts[]> = (payload) => ({
 // THUNKS
 
 export const initializeApp = (): TThunk => async (dispatch) => {
-  const posts: IPosts[] = await api.getPosts();
   const user: IUser = await api.isUserAuthed();
+  const posts: IPosts[] = await api.getPosts();
 
   batch(() => {
     dispatch(setUser(user));
