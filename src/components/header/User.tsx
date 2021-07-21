@@ -1,9 +1,9 @@
 import { FC } from "react";
 import styled from "styled-components";
 
-import { colors } from "../../../utils/colors";
+import { colors } from "../../utils/colors";
 
-import type { IUser } from "../../../types/types";
+import type { IUser } from "../../types/types";
 
 interface IUserStyled {
   size: number;
@@ -47,7 +47,7 @@ interface IUserComp {
   size?: number;
 }
 
-const User: FC<IUserComp> = ({ user, size = 2 }) => {
+export const User: FC<IUserComp> = ({ user, size = 2 }) => {
   return (
     <UserStyled size={size}>
       <span className="name">{user.username}</span>
@@ -61,5 +61,3 @@ const User: FC<IUserComp> = ({ user, size = 2 }) => {
     </UserStyled>
   );
 };
-
-export default User;

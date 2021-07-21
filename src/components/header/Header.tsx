@@ -1,26 +1,14 @@
 import { FC } from "react";
 import styled from "styled-components";
 
-import User from "./user";
+import { User } from "./User";
+import { Logo } from "./Logo";
 
 import { colors } from "../../utils/colors";
 
 import logo from "../../assets/images/logo.png";
 
 import type { IUser } from "../../types/types";
-
-const LogoStyled = styled.div`
-  .image {
-    border: none;
-    height: 2rem;
-  }
-
-  @media (min-width: 768px) {
-    .image {
-      height: 3rem;
-    }
-  }
-`;
 
 const HeaderStyled = styled.header`
   display: flex;
@@ -52,9 +40,7 @@ interface IHeader {
 const Header: FC<IHeader> = ({ user }) => {
   return (
     <HeaderStyled>
-      <LogoStyled>
-        <img className="image" src={logo} alt="Simple Blog" />
-      </LogoStyled>
+      <Logo image={logo} />
 
       <User user={user} />
     </HeaderStyled>

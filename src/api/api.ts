@@ -12,6 +12,7 @@ const fakePosts: IPosts[] = new Array(3).fill(0).map((_, i) => ({
   text: text,
   headPhoto: image1,
   photoURLs: [image1, image2],
+  date: '20 Июля 2021',
 }));
 
 const fakeUser = {

@@ -16,6 +16,7 @@ export interface IPosts {
   text: string;
   headPhoto: string;
   photoURLs: string[];
+  date: string;
 }
 
 // REDUX & STATE

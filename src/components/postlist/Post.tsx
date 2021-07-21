@@ -2,7 +2,10 @@ import { FC } from "react";
 import type { IPosts } from "../../types/types";
 import styled from "styled-components";
 
+import { ButtonIcon } from "../buttons/buttonIcon/ButtonIcon";
+
 import { colors } from "../../utils/colors";
+import { icons } from "../../assets/icons/icons";
 
 const PostStyled = styled.div`
   border-radius: 1rem;
@@ -23,15 +26,44 @@ const PostStyled = styled.div`
     object-fit: cover;
   }
 
-  .title {
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1rem;
     padding: 0 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 700;
+
+    &_title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    &_buttons {
+      display: flex;
+      align-items: center;
+    }
   }
 
-  .content {
+  .body {
+    margin-bottom: 1rem;
     padding: 0 0.5rem;
+  }
+
+  .legs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.5rem;
+
+    &_date {
+      font-size: 0.75rem;
+      color: ${colors.fontGray};
+    }
+
+    &_buttons {
+      display: flex;
+      align-items: center;
+    }
   }
 `;
 
@@ -42,11 +74,32 @@ interface IPostComp {
 export const Post: FC<IPostComp> = ({ post }) => {
   return (
     <PostStyled>
-      <img className="image" src={post.headPhoto} alt={post.title} />
+      <img
+        className="image"
+        src={post.headPhoto}
+        alt={post.title}
+        draggable={false}
+      />
 
-      <h3 className="title">{post.title}</h3>
+      <div className="head">
+        <h3 className="head_title font_condensed">{post.title}</h3>
 
-      <p className="content">{post.text}</p>
+        <div className="head_buttons">
+          <ButtonIcon icon={icons.trash} danger />
+
+          <ButtonIcon icon={icons.pencil} />
+        </div>
+      </div>
+
+      <p className="body">{post.text}</p>
+
+      <div className="legs">
+        <div className="legs_date">{post.date}</div>
+
+        <div className="legs_buttons">
+          <ButtonIcon icon={icons.like} />
+        </div>
+      </div>
     </PostStyled>
   );
 };

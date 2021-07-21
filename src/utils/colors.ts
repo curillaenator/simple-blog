@@ -1,5 +1,7 @@
 export const colors = {
   fontDark: "#383c44",
+  fontDarkLight: "#5f6573",
+  fontGray: "#6f7888",
   fontWhite: "#ffffff",
 
   success: "#91b500",
