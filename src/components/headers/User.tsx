@@ -5,7 +5,7 @@ import { ButtonGhost } from "../buttons/buttonGhost/ButtonGhost";
 import { colors } from "../../utils/colors";
 
 import type { IUser } from "../../types/types";
-import type { FC, RefObject } from "react";
+import type { FC } from "react";
 
 interface IUserStyled {
   size: number;

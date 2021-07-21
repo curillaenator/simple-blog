@@ -7,30 +7,20 @@ import { Loader } from "../../components/loader/Loader";
 
 import type { TState } from "../../redux/store";
 
-import { signInWithGoogle, setUserMenu } from "../../redux/reducers/main";
+import { signInWithGoogle } from "../../redux/reducers/main";
 
 import { icons } from "../../assets/icons/icons";
 
 type TBlog = ConnectedProps<typeof connector>;
 
-const Blog: FC<TBlog> = ({
-  initialized,
-  posts,
-  user,
-  signInWithGoogle,
-  setUserMenu,
-}) => {
+const Blog: FC<TBlog> = ({ initialized, posts, user, signInWithGoogle }) => {
   if (!initialized) {
     return <Loader icon={icons.loader} title="Загружаю..." fullscreen />;
   }
 
   return (
     <div className="page">
-      <Header
-        user={user}
-        signInWithGoogle={signInWithGoogle}
-        setUserMenu={setUserMenu}
-      />
+      <Header user={user} signInWithGoogle={signInWithGoogle} />
       <PostList posts={posts} />
     </div>
   );
@@ -44,7 +34,6 @@ const mstp = (state: TState) => ({
 
 const mdtp = {
   signInWithGoogle,
-  setUserMenu,
 };
 
 const connector = connect(mstp, mdtp);

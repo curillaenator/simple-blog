@@ -10,7 +10,7 @@ import { colors } from "../../utils/colors";
 import { userMenu } from "../../fixedcontent/fixedcontent";
 import logo from "../../assets/images/logo.png";
 
-import type { IUser, TAction } from "../../types/types";
+import type { IUser } from "../../types/types";
 
 const HeaderStyled = styled.header`
   display: flex;
@@ -38,7 +38,6 @@ const HeaderStyled = styled.header`
 interface IHeader {
   user: IUser;
   signInWithGoogle: () => void;
-  setUserMenu: TAction<boolean>;
 }
 
 const Header: FC<IHeader> = ({ user, signInWithGoogle }) => {
