@@ -3,6 +3,12 @@ import { TState } from "../redux/store";
 
 // COMMON
 
+export interface IPhoto {
+  width: number;
+  height: number;
+  src: string;
+}
+
 export interface IUser {
   id: string | null;
   username?: string;
@@ -15,7 +21,7 @@ export interface IPosts {
   title: string;
   text: string;
   headPhoto: string;
-  photoURLs: string[];
+  photos: IPhoto[];
   date: string;
 }
 

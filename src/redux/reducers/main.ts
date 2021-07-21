@@ -16,7 +16,7 @@ const SET_POSTS = "main/SET_POSTS";
 
 const initialState: IInitialState = {
   initialize: false,
-  user: { id: null, role: "guest" },
+  user: { id: "", username: "", avatar: "", role: "guest" },
   posts: [],
 };
 
@@ -60,11 +60,19 @@ const setPosts: TAction<IPosts[]> = (payload) => ({
 
 export const initializeApp = (): TThunk => async (dispatch) => {
   const posts = await api.getPosts();
-  const user = await api.getUser();
+
+  batch(() => {
+    // dispatch(setUser(user));
+    dispatch(setPosts(posts));
+    dispatch(setInitialize(true));
+  });
+};
+
+export const signInWithGoogle = (): TThunk => async (dispatch) => {
+  const user: IUser = await api.signInWithGoogle();
+  const isNewUser: boolean = await api.createUserInDB(user);
 
   batch(() => {
     dispatch(setUser(user));
-    dispatch(setPosts(posts));
-    dispatch(setInitialize(true));
   });
 };

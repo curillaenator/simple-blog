@@ -1,11 +1,13 @@
 import { FC } from "react";
-import type { IPosts } from "../../types/types";
+import type { IPosts } from "../../../types/types";
+import Gallery from "react-photo-gallery";
 import styled from "styled-components";
 
-import { ButtonIcon } from "../buttons/buttonIcon/ButtonIcon";
+import { ButtonIcon } from "../../buttons/buttonIcon/ButtonIcon";
+// import { Gallery } from "../gallery/Gallery";
 
-import { colors } from "../../utils/colors";
-import { icons } from "../../assets/icons/icons";
+import { colors } from "../../../utils/colors";
+import { icons } from "../../../assets/icons/icons";
 
 const PostStyled = styled.div`
   border-radius: 1rem;
@@ -45,6 +47,11 @@ const PostStyled = styled.div`
   }
 
   .body {
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  .gallery {
     margin-bottom: 1rem;
     padding: 0 0.5rem;
   }
@@ -91,7 +98,13 @@ export const Post: FC<IPostComp> = ({ post }) => {
         </div>
       </div>
 
-      <p className="body">{post.text}</p>
+      <div className="body">
+        <p>{post.text}</p>
+      </div>
+
+      <div className="gallery">
+        <Gallery photos={post.photos} />
+      </div>
 
       <div className="legs">
         <div className="legs_date">{post.date}</div>

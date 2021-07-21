@@ -43,11 +43,14 @@ const UserStyled = styled.div<IUserStyled>`
 `;
 
 interface IUserComp {
-  user: IUser;
+  user: IUser ;
   size?: number;
 }
 
 export const User: FC<IUserComp> = ({ user, size = 2 }) => {
+  console.log(user);
+  if (user.role === "guest") return <div>Guest</div>;
+
   return (
     <UserStyled size={size}>
       <span className="name">{user.username}</span>

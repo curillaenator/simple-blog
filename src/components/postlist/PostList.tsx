@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
 
-import { Post } from "./Post";
+import { Post } from "./post/Post";
 
 import type { IPosts } from "../../types/types";
 
