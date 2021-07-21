@@ -3,16 +3,26 @@ import { TState } from "../redux/store";
 
 // COMMON
 
+export interface IUser {
+  id: string | null;
+  username?: string;
+  avatar?: string;
+  role: string;
+}
+
 export interface IPosts {
   id: string;
   title: string;
   text: string;
+  headPhoto: string;
+  photoURLs: string[];
 }
 
 // REDUX & STATE
 
 export interface IInitialState {
   initialize: boolean;
+  user: IUser;
   posts: IPosts[];
 }
 
