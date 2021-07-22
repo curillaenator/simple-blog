@@ -1,5 +1,8 @@
-import { FC, ReactNode } from "react";
 import styled from "styled-components";
+
+import { icons } from "../../assets/icons/icons";
+
+import type { FC, ReactNode } from "react";
 
 interface ILoaderStyled {
   fs: boolean;
@@ -34,12 +37,16 @@ const LoaderStyled = styled.div<ILoaderStyled>`
 `;
 
 interface ILoader {
-  title: string;
-  icon: ReactNode;
+  title?: string;
+  icon?: ReactNode;
   fullscreen?: boolean;
 }
 
-export const Loader: FC<ILoader> = ({ title, icon, fullscreen = false }) => {
+export const Loader: FC<ILoader> = ({
+  title = "Загружаю...",
+  icon = icons.loader,
+  fullscreen = false,
+}) => {
   return (
     <LoaderStyled fs={fullscreen}>
       <div className="content">

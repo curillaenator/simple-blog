@@ -62,11 +62,9 @@ const setPosts: TAction<IPosts[]> = (payload) => ({
 
 export const initializeApp = (): TThunk => async (dispatch) => {
   const user: IUser = await api.isUserAuthed();
-  const posts: IPosts[] = await api.getPosts();
 
   batch(() => {
     dispatch(setUser(user));
-    dispatch(setPosts(posts));
     dispatch(setInitialize(true));
   });
 };
@@ -82,14 +80,19 @@ export const signInWithGoogle = (): TThunk => async (dispatch) => {
 };
 
 export const logOut = (): TThunk => async (dispatch) => {
-  dispatch(setInitialize(false));
-
-  const isLogOut = await api.logOut();
+  const isLogOut: boolean = await api.logOut();
 
   if (isLogOut) {
     batch(() => {
       dispatch(setUser(guest));
-      dispatch(setInitialize(true));
     });
   }
+};
+
+export const getAuthoredPosts = (): TThunk => async (dispatch) => {
+  const posts: IPosts[] = await api.getPosts();
+
+  batch(() => {
+    dispatch(setPosts(posts));
+  });
 };

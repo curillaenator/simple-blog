@@ -59,6 +59,12 @@ const Header: FC<IHeader> = ({ user, signInWithGoogle, logOut }) => {
     },
     {
       id: "menu3",
+      title: "Моя барахолка",
+      icon: icons.shop,
+      handler: () => {},
+    },
+    {
+      id: "menu4",
       title: "Выйти из аккаунта",
       icon: icons.logout,
       handler: logOut,

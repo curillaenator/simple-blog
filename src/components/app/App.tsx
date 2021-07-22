@@ -15,7 +15,6 @@ import {
 } from "../../redux/reducers/main";
 
 import { colors } from "../../utils/colors";
-import { icons } from "../../assets/icons/icons";
 
 import type { TState } from "../../redux/store";
 
@@ -37,12 +36,12 @@ const App: FC<TApp> = ({
   signInWithGoogle,
   logOut,
 }) => {
-  useEffect(() => {
-    initializeApp();
-  }, []);
+  // console.log("render");
+
+  useEffect(() => initializeApp(), [initializeApp]);
 
   if (!initialized) {
-    return <Loader icon={icons.loader} title="Загружаю..." fullscreen />;
+    return <Loader fullscreen />;
   }
 
   return (
@@ -51,7 +50,7 @@ const App: FC<TApp> = ({
 
       <Switch>
         <Route exact path="/" render={() => <BlogPage />} />
-        <Route path="profile/:id?" render={() => <ProfilePage />} />
+        <Route path="/profile/:userid?" render={() => <ProfilePage />} />
       </Switch>
     </AppContainer>
   );
