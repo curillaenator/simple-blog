@@ -1,15 +1,16 @@
-import { FC } from "react";
 import styled from "styled-components";
 
 import { User } from "./User";
 import { Logo } from "./Logo";
+import { ButtonGhost } from "../buttons/buttonGhost/ButtonGhost";
 import { Dropdown } from "../dropdown/Dropdown";
 
 import { colors } from "../../utils/colors";
+import { icons } from "../../assets/icons/icons";
 
-import { userMenu } from "../../fixedcontent/fixedcontent";
 import logo from "../../assets/images/logo.png";
 
+import type { FC } from "react";
 import type { IUser } from "../../types/types";
 
 const HeaderStyled = styled.header`
@@ -17,7 +18,7 @@ const HeaderStyled = styled.header`
   justify-content: space-between;
   align-items: center;
   height: 64px;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   padding: 0 1rem;
   border-radius: 0 0 1rem 1rem;
   background-color: ${colors.backPrimary};
@@ -30,6 +31,7 @@ const HeaderStyled = styled.header`
 
   @media (min-width: 768px) {
     height: 96px;
+    margin-bottom: 2rem;
     padding: 0 2rem;
     border-radius: 0 0 2rem 2rem;
   }
@@ -38,16 +40,48 @@ const HeaderStyled = styled.header`
 interface IHeader {
   user: IUser;
   signInWithGoogle: () => void;
+  logOut: () => void;
 }
 
-const Header: FC<IHeader> = ({ user, signInWithGoogle }) => {
+const Header: FC<IHeader> = ({ user, signInWithGoogle, logOut }) => {
+  const userMenu = [
+    {
+      id: "menu1",
+      title: "Редактировать профиль",
+      icon: icons.pencil,
+      handler: () => {},
+    },
+    {
+      id: "menu2",
+      title: "Открыть мой чат",
+      icon: icons.chat,
+      handler: () => {},
+    },
+    {
+      id: "menu3",
+      title: "Выйти из аккаунта",
+      icon: icons.logout,
+      handler: logOut,
+    },
+  ];
+
   return (
     <HeaderStyled>
       <Logo image={logo} />
 
-      <Dropdown options={userMenu} mtop={4.2}>
-        <User user={user} signInWithGoogle={signInWithGoogle} />
-      </Dropdown>
+      {user.role === "guest" && (
+        <ButtonGhost
+          title="Вход"
+          color={colors.fontWhite}
+          handler={signInWithGoogle}
+        />
+      )}
+
+      {user.role !== "guest" && (
+        <Dropdown options={userMenu} mtop={4.2}>
+          <User user={user} />
+        </Dropdown>
+      )}
     </HeaderStyled>
   );
 };

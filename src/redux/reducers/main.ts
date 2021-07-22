@@ -80,3 +80,16 @@ export const signInWithGoogle = (): TThunk => async (dispatch) => {
     dispatch(setUser(user));
   });
 };
+
+export const logOut = (): TThunk => async (dispatch) => {
+  dispatch(setInitialize(false));
+
+  const isLogOut = await api.logOut();
+
+  if (isLogOut) {
+    batch(() => {
+      dispatch(setUser(guest));
+      dispatch(setInitialize(true));
+    });
+  }
+};

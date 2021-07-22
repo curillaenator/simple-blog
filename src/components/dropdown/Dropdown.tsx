@@ -1,12 +1,19 @@
 import { AnyAction } from "@reduxjs/toolkit";
-import { FC, useReducer, useEffect, ReactNode } from "react";
+import { useReducer, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 
 import { ButtonGhost } from "../buttons/buttonGhost/ButtonGhost";
 
 import { icons } from "../../assets/icons/icons";
 
-import type { IDropOption, TReducer, TAction } from "../../types/types";
+import type { FC, ReactNode } from "react";
+import type {
+  IDropOption,
+  TReducer,
+  TAction,
+  TEventHandler,
+} from "../../types/types";
+
 import { colors } from "../../utils/colors";
 
 // STATE
@@ -99,7 +106,7 @@ interface IDropdown {
   title?: string;
   options: IDropOption[];
   multiselect?: boolean;
-  mtop: number; // rems from top to list
+  mtop?: number; // rems from top to list
   children?: ReactNode;
 }
 
@@ -110,10 +117,29 @@ export const Dropdown: FC<IDropdown> = ({
   mtop = 3,
   children,
 }) => {
+  const ref = useRef(null);
+
   const [state, dispatch] = useReducer(reducer, initialState);
   const { open, list } = state;
 
+  // set options to local state to work with
   useEffect(() => dispatch(setList(options)), [options]);
+
+  // close dropdown on outside list click
+  const handleClose: TEventHandler<any> = useCallback(
+    (event) => {
+      //@ts-ignore
+      if (open && ref.current && !ref.current.contains(event.target)) {
+        dispatch(setOpen(false));
+      }
+    },
+    [open]
+  );
+
+  useEffect(() => {
+    document.addEventListener("click", handleClose);
+    return () => document.removeEventListener("click", handleClose);
+  }, [open, handleClose]);
 
   const handleOptionHandler = (handler: () => void) => {
     handler();
@@ -123,19 +149,26 @@ export const Dropdown: FC<IDropdown> = ({
   return (
     <DropdownStyled open={open} mtop={mtop} multiselect={multiselect}>
       {children && (
-        <div className="ddchildren" onClick={() => dispatch(setOpen(!open))}>
+        <div
+          className="ddchildren"
+          onClick={() => !open && dispatch(setOpen(true))}
+        >
           {children}
         </div>
       )}
 
       {!children && (
-        <div className="ddtitle" onClick={() => dispatch(setOpen(!open))}>
+        <div
+          className="ddtitle"
+          onClick={() => !open && dispatch(setOpen(true))}
+        >
           <span className="ddtitle_label">{title}</span>
           {icons.arrow}
         </div>
       )}
 
-      <div className="ddoptions">
+      {/* @ts-ignore */}
+      <div className="ddoptions" ref={ref}>
         {list.map((opt) => (
           <ButtonGhost
             title={opt.title}

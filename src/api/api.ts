@@ -26,6 +26,13 @@ export const api = {
     return new Promise((resolve) => resolve(fakePosts));
   },
 
+  logOut(): Promise<boolean> {
+    return new Promise((resolve) => {
+      auth.signOut();
+      resolve(true);
+    });
+  },
+
   signInWithGoogle(): Promise<IUser> {
     return new Promise(async (resolve) => {
       const provider = new firebase.auth.GoogleAuthProvider();

@@ -1,7 +1,5 @@
 import styled from "styled-components";
 
-import { ButtonGhost } from "../buttons/buttonGhost/ButtonGhost";
-
 import { colors } from "../../utils/colors";
 
 import type { IUser } from "../../types/types";
@@ -61,21 +59,9 @@ const UserStyled = styled.div<IUserStyled>`
 interface IUserComp {
   user: IUser;
   size?: number;
-  signInWithGoogle: () => void;
 }
 
-export const User: FC<IUserComp> = ({ user, size = 2, signInWithGoogle }) => {
-  if (user.role === "guest")
-    return (
-      <div>
-        <ButtonGhost
-          title="Вход"
-          color={colors.fontWhite}
-          handler={signInWithGoogle}
-        />
-      </div>
-    );
-
+export const User: FC<IUserComp> = ({ user, size = 2 }) => {
   return (
     <UserStyled size={size}>
       <span className="name">{user.username}</span>
