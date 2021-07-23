@@ -76,7 +76,7 @@ interface IPostComp {
   post: IPosts;
 }
 
-export const Post: FC<IPostComp> = ({ post }) => {
+const Post: FC<IPostComp> = ({ post }) => {
   return (
     <PostStyled>
       <img
@@ -112,3 +112,5 @@ export const Post: FC<IPostComp> = ({ post }) => {
     </PostStyled>
   );
 };
+
+export default Post;

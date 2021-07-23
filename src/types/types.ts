@@ -28,6 +28,15 @@ export interface IDropOption {
   handler: () => void;
 }
 
+export interface ITextInput {
+  name: string;
+  value: string;
+  label: string;
+  placeholder?: string;
+  autoComplete?: boolean;
+  onChange: (value: string) => void;
+}
+
 // REDUX & STATE
 
 // main reducer initial state

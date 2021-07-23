@@ -1,3 +1,5 @@
+/* COMMON STYLES */
+
 *,
 *::after,
 *::before {
@@ -20,13 +22,34 @@ body {
   font-family: "Open Sans Condensed", sans-serif;
 }
 
-input {
+/* INPUT STYLES */
+
+input,
+textarea {
+  width: 100%;
+  padding: 0 1rem;
   font-family: "Open Sans", sans-serif;
   font-size: 15px;
   font-weight: 400;
+  outline: none;
+  border: none;
+  border-radius: 1.2rem;
+  resize: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+input::placeholder,
+textarea::placeholder {
+  transition: 0.08s linear;
+}
+
+input:focus::placeholder,
+textarea:focus::placeholder {
+  opacity: 0;
+}
+
+/* BUTTON STYLES */
 
 button {
   margin: 0;
@@ -36,6 +59,8 @@ button {
   background-color: transparent;
   cursor: pointer;
 }
+
+/* MISC STYLES */
 
 .temptemp {
   background-color: #799700;
