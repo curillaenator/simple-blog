@@ -6,6 +6,7 @@ import { guest } from "../../fixedcontent/fixedcontent";
 import type { Reducer, AnyAction } from "@reduxjs/toolkit";
 import type {
   IPosts,
+  INewPost,
   IUser,
   IInitialState,
   TAction,
@@ -95,4 +96,8 @@ export const getAuthoredPosts = (): TThunk => async (dispatch) => {
   batch(() => {
     dispatch(setPosts(posts));
   });
+};
+
+export const createAuthoredPost = (payload: INewPost): TThunk => async (dispatch) => {
+
 };

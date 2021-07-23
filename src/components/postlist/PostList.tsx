@@ -1,17 +1,20 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { Loader } from "../loader/Loader";
 import Post from "./post";
 import Cta from "./cta";
+import PostForm from "./postform";
 
 import type { FC } from "react";
-import type { IPosts } from "../../types/types";
-
-const PostForm = lazy(() => import("./postform"));
+import type { IPosts, INewPost } from "../../types/types";
 
 const PostListStyled = styled.section`
   .attention {
+    margin-bottom: 2rem;
+  }
+
+  .postform {
+    margin-bottom: 2rem;
   }
 
   .postlist {
@@ -21,6 +24,7 @@ const PostListStyled = styled.section`
 interface IPostList {
   posts: IPosts[];
   getAuthoredPosts: () => void;
+  createAuthoredPost: (payload: INewPost) => void;
 }
 
 const PostList: FC<IPostList> = ({ posts, getAuthoredPosts }) => {
@@ -34,15 +38,18 @@ const PostList: FC<IPostList> = ({ posts, getAuthoredPosts }) => {
         <Cta active={postForm} handler={() => setPostForm((prev) => !prev)} />
       </div>
 
-      {postForm && <PostForm />}
-
-      {!postForm && (
-        <div className="postlist">
-          {posts.map((post) => (
-            <Post key={post.id} post={post} />
-          ))}
+      {postForm && (
+        <div className="postform">
+          {" "}
+          <PostForm />
         </div>
       )}
+
+      <div className="postlist">
+        {posts.map((post) => (
+          <Post key={post.id} post={post} />
+        ))}
+      </div>
     </PostListStyled>
   );
 };

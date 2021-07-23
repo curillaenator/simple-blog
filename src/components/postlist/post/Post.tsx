@@ -8,7 +8,7 @@ import { colors } from "../../../utils/colors";
 import { icons } from "../../../assets/icons/icons";
 
 const PostStyled = styled.div`
-  border-radius: 1rem;
+  border-radius: 2rem;
   background-color: ${colors.backGrayLight};
   overflow: hidden;
   padding-bottom: 1rem;
@@ -31,7 +31,7 @@ const PostStyled = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-    padding: 0 0.5rem;
+    padding: 0 1rem;
 
     &_title {
       font-size: 1.5rem;
@@ -46,19 +46,14 @@ const PostStyled = styled.div`
 
   .body {
     margin-bottom: 1rem;
-    padding: 0 0.5rem;
-  }
-
-  .gallery {
-    margin-bottom: 1rem;
-    padding: 0 0.5rem;
+    padding: 0 1rem;
   }
 
   .legs {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 0.5rem;
+    padding: 0 1rem;
 
     &_date {
       font-size: 0.75rem;

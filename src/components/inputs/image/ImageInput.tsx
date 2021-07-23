@@ -12,6 +12,8 @@ const InputStyled = styled.div`
     gap: 0.5rem;
     min-height: 40px;
     padding: 0 1rem;
+    background-color: ${colors.backGrayLight};
+    border-radius: 1rem;
     transition: 0.08 linear;
     cursor: pointer;
 

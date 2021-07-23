@@ -11,12 +11,15 @@ export interface IUser {
   role: string;
 }
 
-// single post
-export interface IPosts {
-  id: string;
+export interface INewPost {
   title: string;
   text: string;
   headPhoto: string;
+}
+
+// single post
+export interface IPosts extends INewPost {
+  id: string;
   date: string;
 }
 

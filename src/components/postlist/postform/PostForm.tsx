@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { Button } from "../../buttons/button/Button";
@@ -7,13 +7,39 @@ import { TextInput } from "../../inputs/text/TextInput";
 import { AreaInput } from "../../inputs/area/AreaInput";
 
 import { colors } from "../../../utils/colors";
+import { icons } from "../../../assets/icons/icons";
 import { resizeImage } from "../../../utils/functions";
 
 import type { FC } from "react";
 import type { IPosts } from "../../../types/types";
 
+interface IImageHeadStyled {
+  image: boolean;
+}
+
+const ImageHeadStyled = styled.div<IImageHeadStyled>`
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: ${({ image }) => (image ? "10rem" : "unset")};
+  margin-bottom: 1rem;
+  padding-top: ${({ image }) => (image ? "0" : "1rem")};
+
+  .headimage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .field {
+    z-index: 10;
+  }
+`;
+
 const FormStyled = styled.form`
-  padding: 1rem;
   border-radius: 2rem;
   background-color: ${colors.backGrayLight};
   overflow: hidden;
@@ -23,11 +49,17 @@ const FormStyled = styled.form`
 
     .field {
       margin-bottom: 1rem;
+      padding: 0 1rem;
 
       &:last-child {
         margin-bottom: 0;
       }
     }
+  }
+
+  .buttons {
+    margin-bottom: 1rem;
+    padding: 0 1rem;
   }
 `;
 
@@ -40,20 +72,27 @@ const PostForm: FC<IPostForm> = ({ inititalValues = {} }) => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
-  const [valid, setValid] = useState(true);
+  const [isNotComplete, setIsNotComplete] = useState(true);
+
+  useEffect(() => {
+    if (!headPhoto || !title || !text) return setIsNotComplete(true);
+
+    if (headPhoto && title && text) return setIsNotComplete(false);
+  }, [headPhoto, title, text]);
 
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (headPhoto && title && text) {
-      const payload = {
-        headPhoto,
-        title,
-        text,
-      };
+    const titleTrimmed = title.trim();
+    const textTrimmed = text.trim().replace(/\n/g, "<br/>");
 
-      console.log(payload);
-    }
+    const payload = {
+      headPhoto,
+      title: titleTrimmed,
+      text: textTrimmed,
+    };
+
+    console.log(payload);
   };
 
   const imageHandler = async (files: FileList) => {
@@ -62,20 +101,26 @@ const PostForm: FC<IPostForm> = ({ inititalValues = {} }) => {
     setHeadPhoto(image);
   };
 
-  const titleHandler = (str:string) => {
-    str.trim();
-  } 
-
   return (
     <FormStyled onSubmit={onSubmit}>
       <div className="fields">
-        <div className="field">
-          <ImageInput
-            name="image"
-            id="post_head_image"
-            imageHandler={imageHandler}
-          />
-        </div>
+        <ImageHeadStyled image={!!headPhoto}>
+          {!!headPhoto && (
+            <img
+              className="headimage"
+              src={URL.createObjectURL(headPhoto)}
+              alt="HeadPhoto"
+            />
+          )}
+
+          <div className="field">
+            <ImageInput
+              name="image"
+              id="post_head_image"
+              imageHandler={imageHandler}
+            />
+          </div>
+        </ImageHeadStyled>
 
         <div className="field">
           <TextInput
@@ -97,7 +142,11 @@ const PostForm: FC<IPostForm> = ({ inititalValues = {} }) => {
       </div>
 
       <div className="buttons">
-        <Button title="Опубликовать" />
+        <Button
+          icon={icons.success}
+          title="Опубликовать"
+          disabled={isNotComplete}
+        />
       </div>
     </FormStyled>
   );

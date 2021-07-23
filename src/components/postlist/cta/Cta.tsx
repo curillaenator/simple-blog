@@ -11,7 +11,6 @@ const CtaStyled = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 2rem;
 
   .line {
     width: 100%;
