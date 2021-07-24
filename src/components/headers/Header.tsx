@@ -44,6 +44,23 @@ interface IHeader {
 }
 
 const Header: FC<IHeader> = ({ user, signInWithGoogle, logOut }) => {
+  const authMenu: IDropOption[] = [
+    {
+      id: "authPassword",
+      danger: false,
+      title: "Войти через логин и пароль",
+      icon: icons.key,
+      handler: () => {},
+    },
+    {
+      id: "authGoogle",
+      danger: false,
+      title: "Войти через Google",
+      icon: icons.google,
+      handler: signInWithGoogle,
+    },
+  ];
+
   const userMenu: IDropOption[] = [
     {
       id: "menu1",
@@ -80,11 +97,9 @@ const Header: FC<IHeader> = ({ user, signInWithGoogle, logOut }) => {
       <Logo image={logo} />
 
       {user.role === "guest" && (
-        <ButtonGhost
-          title="Вход"
-          color={colors.fontWhite}
-          handler={signInWithGoogle}
-        />
+        <Dropdown options={authMenu}>
+          <ButtonGhost title="Вход" color={colors.fontWhite} />
+        </Dropdown>
       )}
 
       {user.role !== "guest" && (

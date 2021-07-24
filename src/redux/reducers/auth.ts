@@ -50,7 +50,7 @@ export const initializeApp = (): TThunk => async (dispatch) => {
 export const signInWithGoogle = (): TThunk => async (dispatch) => {
   const user: IUser = await authApi.signInWithGoogle();
   const isNewUser: boolean = await authApi.createUserInDB(user);
-  console.log(isNewUser);
+  console.log("Are you new user? - ", isNewUser);
 
   batch(() => {
     dispatch(setUser(user));

@@ -158,7 +158,9 @@ export const postsApi = {
       const postsSnap = await db.ref(`posts/${userID}`).once("value");
 
       //@ts-ignore
-      const postsArray: IPosts[] = Object.values(postsSnap.val()).reverse();
+      const postsArray: IPosts[] = postsSnap.exists()
+        ? Object.values(postsSnap.val()).reverse()
+        : [];
 
       const postsPromises = postsArray.map(async (post: IPosts) => ({
         ...post,
