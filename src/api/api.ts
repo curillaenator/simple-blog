@@ -77,6 +77,18 @@ export const storageApi = {
     });
   },
 
+  removeImage(url: string): Promise<string> {
+    return new Promise((resolve) => {
+      storage
+        .refFromURL(url)
+        .delete()
+        .then(() => {
+          resolve("success");
+        })
+        .catch(() => resolve("error"));
+    });
+  },
+
   getImage(path: string): Promise<string> {
     return new Promise(async (resolve) => {
       const url: string = await storage.ref().child(path).getDownloadURL();
@@ -88,7 +100,7 @@ export const storageApi = {
 export const postsApi = {
   createNewPost(userID: string, payload: INewPost): Promise<IPosts | null> {
     return new Promise((resolve) => {
-      const postID = db.ref("posts").push().key;
+      const postID = db.ref(`posts/${userID}`).push().key;
       //@ts-ignore
       const image = payload.headPhoto;
       //@ts-ignore
@@ -108,10 +120,10 @@ export const postsApi = {
       const imagePromise = storageApi.uploadImage(path, image);
 
       // CREATE POST IN DB
-      const postPromise: Promise<string> = new Promise((rslv) => {
-        const onUpd = (err: any) => (err ? rslv("error") : rslv("success"));
+      const postPromise: Promise<string> = new Promise((res) => {
+        const onUpd = (err: any) => (err ? res("error") : res("success"));
 
-        db.ref(`posts/${postID}`).update(newPost, onUpd);
+        db.ref(`posts/${userID}/${postID}`).update(newPost, onUpd);
       });
 
       // RESOLVE NEW POST FOR STATE UPDATE
@@ -121,9 +133,29 @@ export const postsApi = {
     });
   },
 
-  getPosts(): Promise<IPosts[]> {
+  removePost(userID: string, post: IPosts): Promise<string | null> {
     return new Promise(async (resolve) => {
-      const postsSnap = await db.ref("posts").once("value");
+      // remove headPhoto from storage
+      const imgPromise = await storageApi.removeImage(post.headPhoto);
+
+      // remove post from db
+      const postPromise: Promise<string> = new Promise((res) => {
+        const onSet = (err: any) => (err ? res("error") : res("success"));
+        db.ref(`posts/${userID}/${post.id}`).set(null, onSet);
+      });
+
+      // resolve all removes
+      Promise.all([imgPromise, postPromise]).then((res) => {
+        if (res.includes("error")) return resolve(null);
+
+        resolve("success");
+      });
+    });
+  },
+
+  getPosts(userID: string): Promise<IPosts[]> {
+    return new Promise(async (resolve) => {
+      const postsSnap = await db.ref(`posts/${userID}`).once("value");
 
       //@ts-ignore
       const postsArray: IPosts[] = Object.values(postsSnap.val()).reverse();

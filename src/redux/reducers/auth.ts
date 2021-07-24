@@ -7,18 +7,18 @@ import { guest } from "../../fixedcontent/fixedcontent";
 import type { IUser, TThunk } from "../../types/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-interface IMainState {
+interface IAuthState {
   initialized: boolean;
   user: IUser;
 }
 
-const initialState: IMainState = {
+const initialState: IAuthState = {
   initialized: false,
   user: guest,
 };
 
 const mainSlice = createSlice({
-  name: "main",
+  name: "auth",
   initialState,
   reducers: {
     setInitialize: (state, action: PayloadAction<boolean>) => {
@@ -30,7 +30,7 @@ const mainSlice = createSlice({
   },
 });
 
-export const main = mainSlice.reducer;
+export const auth = mainSlice.reducer;
 
 // ACTIONS
 

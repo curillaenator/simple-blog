@@ -12,7 +12,7 @@ import {
   initializeApp,
   signInWithGoogle,
   logOut,
-} from "../../redux/reducers/main";
+} from "../../redux/reducers/auth";
 
 import { colors } from "../../utils/colors";
 
@@ -57,8 +57,8 @@ const App: FC<TApp> = ({
 };
 
 const mstp = (state: TState) => ({
-  initialized: state.main.initialized,
-  user: state.main.user,
+  initialized: state.auth.initialized,
+  user: state.auth.user,
 });
 
 const mdtp = {

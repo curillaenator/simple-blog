@@ -23,11 +23,13 @@ export interface IPosts {
   text: string;
   date: string;
   headPhoto: string;
+  likes?: string[];
 }
 
 // universal dropdown option
 export interface IDropOption {
   id: string;
+  danger: boolean;
   icon: ReactNode;
   title: string;
   handler: () => void;

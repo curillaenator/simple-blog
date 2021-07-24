@@ -171,6 +171,7 @@ export const Dropdown: FC<IDropdown> = ({
       <div className="ddoptions" ref={ref}>
         {list.map((opt) => (
           <ButtonGhost
+            danger={opt.danger}
             title={opt.title}
             icon={opt.icon}
             key={opt.id}

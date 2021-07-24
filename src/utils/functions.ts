@@ -14,3 +14,29 @@ export const resizeImage = (file: File): Promise<File> =>
       "file"
     );
   });
+
+export const timestampToDate = (date: string | number) => {
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  const d = new Date(+date);
+  //@ts-ignore
+  return d.toLocaleString("ru-RU", options);
+};
+
+export const loaderTitleGenerator = () => {
+  const titles = [
+    "Думаю...",
+    "Вычисляю...",
+    "Сервер томозит...",
+    "Кручу крутилку...",
+    "Расчитываю траекторию до марса...",
+    'Еще секундочку...'
+  ];
+
+  const randomize = Math.floor(Math.random() * titles.length)
+
+  return titles[randomize]
+};

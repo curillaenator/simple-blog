@@ -1,13 +1,19 @@
 import parse from "html-react-parser";
 import styled from "styled-components";
 
+import { useAppDispatch } from "../../../redux/hooks/hooks";
+
 import { ButtonIcon } from "../../buttons/buttonIcon/ButtonIcon";
+import { Dropdown } from "../../dropdown/Dropdown";
+
+import { removeAuthoredPost } from "../../../redux/reducers/posts";
 
 import { colors } from "../../../utils/colors";
 import { icons } from "../../../assets/icons/icons";
+import { timestampToDate } from "../../../utils/functions";
 
 import type { FC } from "react";
-import type { IPosts } from "../../../types/types";
+import type { IPosts, IDropOption } from "../../../types/types";
 
 const PostStyled = styled.div`
   border-radius: 2rem;
@@ -74,6 +80,25 @@ interface IPostComp {
 }
 
 const Post: FC<IPostComp> = ({ post }) => {
+  const dispatch = useAppDispatch();
+
+  const removePostOptions: IDropOption[] = [
+    {
+      id: "optionCancel",
+      danger: false,
+      icon: icons.back,
+      title: "Отмена",
+      handler: () => {},
+    },
+    {
+      id: "optionDelete",
+      danger: true,
+      icon: icons.trash,
+      title: "Удалить",
+      handler: () => dispatch(removeAuthoredPost(post)),
+    },
+  ];
+
   return (
     <PostStyled>
       <img
@@ -88,9 +113,11 @@ const Post: FC<IPostComp> = ({ post }) => {
         <h3 className="head_title font_condensed">{post.title}</h3>
 
         <div className="head_buttons">
-          <ButtonIcon icon={icons.trash} danger />
+          <Dropdown options={removePostOptions}>
+            <ButtonIcon icon={icons.trash} danger />
+          </Dropdown>
 
-          <ButtonIcon icon={icons.pencil} />
+          {/* <ButtonIcon icon={icons.pencil} /> */}
         </div>
       </div>
 
@@ -101,11 +128,11 @@ const Post: FC<IPostComp> = ({ post }) => {
       <div className="gallery"></div>
 
       <div className="legs">
-        <div className="legs_date">{post.date}</div>
+        <div className="legs_date">{timestampToDate(post.date)}</div>
 
-        <div className="legs_buttons">
+        {/* <div className="legs_buttons">
           <ButtonIcon icon={icons.like} />
-        </div>
+        </div> */}
       </div>
     </PostStyled>
   );

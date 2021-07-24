@@ -5,6 +5,7 @@ import { colors } from "../../../utils/colors";
 
 interface IStyledButton {
   color: string;
+  danger: boolean;
 }
 
 const StyledButton = styled.button<IStyledButton>`
@@ -17,16 +18,30 @@ const StyledButton = styled.button<IStyledButton>`
 
   .title {
     font-size: 1.05rem;
-    color: ${({ color }) => color};
     transition: 0.08s linear;
     white-space: nowrap;
+    color: ${({ color, danger }) => {
+      switch (true) {
+        case danger:
+          return colors.danger;
+        default:
+          return color;
+      }
+    }};
   }
 
   & > svg {
     width: 18px;
     height: 18px;
-    fill: ${colors.backPrimary};
     transition: 0.08s linear;
+    fill: ${({ color, danger }) => {
+      switch (true) {
+        case danger:
+          return colors.danger;
+        default:
+          return color;
+      }
+    }};
   }
 
   &:hover {
@@ -54,6 +69,7 @@ interface IButtonGhost {
   title: string;
   icon?: ReactNode;
   color?: string;
+  danger?: boolean;
   handler?: () => void;
 }
 
@@ -61,10 +77,11 @@ export const ButtonGhost: FC<IButtonGhost> = ({
   title,
   icon,
   color = colors.fontDark,
+  danger = false,
   handler = () => console.log("btn_ghost"),
 }) => {
   return (
-    <StyledButton color={color} onClick={handler}>
+    <StyledButton color={color} onClick={handler} danger={danger}>
       {icon && icon}
       <span className="title">{title}</span>
     </StyledButton>

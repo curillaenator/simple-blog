@@ -10,6 +10,8 @@ import PostForm from "./postform";
 
 import { getAuthoredPosts } from "../../redux/reducers/posts";
 
+import { loaderTitleGenerator } from "../../utils/functions";
+
 const PostListStyled = styled.section`
   .attention {
     margin-bottom: 2rem;
@@ -20,20 +22,20 @@ const PostListStyled = styled.section`
   }
 
   .postlist {
+    margin-bottom: 2rem;
   }
 `;
 
 const PostList: FC = () => {
   // console.log("render");
+  const [postForm, setPostForm] = useState(false);
 
   const dispatch = useAppDispatch();
   const { posts, isPending } = useAppSelector((state) => state.posts);
 
-  const [postForm, setPostForm] = useState(false);
-
   useEffect(() => dispatch(getAuthoredPosts()), [dispatch]);
 
-  if (isPending) return <Loader />;
+  if (isPending) return <Loader title={loaderTitleGenerator()} />;
 
   return (
     <PostListStyled>

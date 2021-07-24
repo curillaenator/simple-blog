@@ -1,7 +1,7 @@
 import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 
-import { colors } from "../../../utils/colors";
+// import { colors } from "../../../utils/colors";
 
 import type { FC } from "react";
 import type { ITextInput } from "../../../types/types";

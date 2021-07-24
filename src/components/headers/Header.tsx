@@ -11,7 +11,7 @@ import { icons } from "../../assets/icons/icons";
 import logo from "../../assets/images/logo.png";
 
 import type { FC } from "react";
-import type { IUser } from "../../types/types";
+import type { IUser, IDropOption } from "../../types/types";
 
 const HeaderStyled = styled.header`
   display: flex;
@@ -44,27 +44,31 @@ interface IHeader {
 }
 
 const Header: FC<IHeader> = ({ user, signInWithGoogle, logOut }) => {
-  const userMenu = [
+  const userMenu: IDropOption[] = [
     {
       id: "menu1",
+      danger: false,
       title: "Редактировать профиль",
       icon: icons.pencil,
       handler: () => {},
     },
     {
       id: "menu2",
+      danger: false,
       title: "Открыть мой чат",
       icon: icons.chat,
       handler: () => {},
     },
     {
       id: "menu3",
+      danger: false,
       title: "Моя барахолка",
       icon: icons.shop,
       handler: () => {},
     },
     {
       id: "menu4",
+      danger: false,
       title: "Выйти из аккаунта",
       icon: icons.logout,
       handler: logOut,

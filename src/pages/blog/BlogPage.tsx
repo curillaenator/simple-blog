@@ -35,7 +35,7 @@ const Blog: FC<TBlog> = ({ user }) => {
 };
 
 const mstp = (state: TState) => ({
-  user: state.main.user,
+  user: state.auth.user,
 });
 
 const mdtp = {};
