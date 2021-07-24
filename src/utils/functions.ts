@@ -28,15 +28,15 @@ export const timestampToDate = (date: string | number) => {
 
 export const loaderTitleGenerator = () => {
   const titles = [
-    "Думаю...",
-    "Вычисляю...",
-    "Сервер томозит...",
-    "Кручу крутилку...",
+    "Иногда долго думаю...",
+    "Калькулирую в уме...",
+    "Сервер в панике, но справится...",
+    "Посмотрите какая крутилка...",
     "Расчитываю траекторию до марса...",
-    'Еще секундочку...'
+    "Cекундочку...",
   ];
 
-  const randomize = Math.floor(Math.random() * titles.length)
+  const randomize = Math.floor(Math.random() * titles.length);
 
-  return titles[randomize]
+  return titles[randomize];
 };

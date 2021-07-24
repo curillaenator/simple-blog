@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import styled from "styled-components";
 
-import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector, useToggle } from "../../hooks/hooks";
 
 import { Loader } from "../loader/Loader";
 import Post from "./post";
@@ -28,7 +28,7 @@ const PostListStyled = styled.section`
 
 const PostList: FC = () => {
   // console.log("render");
-  const [postForm, setPostForm] = useState(false);
+  const [postForm, togglePostForm] = useToggle(false);
 
   const dispatch = useAppDispatch();
   const { posts, isPending } = useAppSelector((state) => state.posts);
@@ -40,12 +40,12 @@ const PostList: FC = () => {
   return (
     <PostListStyled>
       <div className="attention">
-        <Cta active={postForm} handler={() => setPostForm((prev) => !prev)} />
+        <Cta active={postForm} handler={togglePostForm} />
       </div>
 
       {postForm && (
         <div className="postform">
-          <PostForm setPostForm={setPostForm} />
+          <PostForm closePostForm={togglePostForm} />
         </div>
       )}
 

@@ -1,7 +1,7 @@
 import parse from "html-react-parser";
 import styled from "styled-components";
 
-import { useAppDispatch } from "../../../redux/hooks/hooks";
+import { useAppDispatch } from "../../../hooks/hooks";
 
 import { ButtonIcon } from "../../buttons/buttonIcon/ButtonIcon";
 import { Dropdown } from "../../dropdown/Dropdown";

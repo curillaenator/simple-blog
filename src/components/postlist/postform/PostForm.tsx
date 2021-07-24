@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { useAppDispatch } from "../../../redux/hooks/hooks";
+import { useAppDispatch } from "../../../hooks/hooks";
 
 import { Button } from "../../buttons/button/Button";
 import { ImageInput } from "../../inputs/image/ImageInput";
@@ -70,22 +70,21 @@ const FormStyled = styled.form`
 
 interface IPostForm {
   inititalValues?: IPosts;
-  setPostForm: React.Dispatch<React.SetStateAction<boolean>>;
+  closePostForm: () => void;
 }
 
-const PostForm: FC<IPostForm> = ({ inititalValues = {}, setPostForm }) => {
+const PostForm: FC<IPostForm> = ({ inititalValues = {}, closePostForm }) => {
   const dispatch = useAppDispatch();
 
   const [headPhoto, setHeadPhoto] = useState(null);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
-  const [isNotComplete, setIsNotComplete] = useState(true);
+  const [isFormUnfilled, setIsFormUnfilled] = useState(true);
 
   useEffect(() => {
-    if (!headPhoto || !title || !text) return setIsNotComplete(true);
-
-    if (headPhoto && title && text) return setIsNotComplete(false);
+    if (!headPhoto || !title || !text) return setIsFormUnfilled(true);
+    if (headPhoto && title && text) return setIsFormUnfilled(false);
   }, [headPhoto, title, text]);
 
   const onSubmit = (event: React.FormEvent) => {
@@ -98,7 +97,7 @@ const PostForm: FC<IPostForm> = ({ inititalValues = {}, setPostForm }) => {
     };
 
     dispatch(createAuthoredPost(payload));
-    setPostForm(false);
+    closePostForm();
   };
 
   const imageHandler = async (files: FileList) => {
@@ -151,7 +150,7 @@ const PostForm: FC<IPostForm> = ({ inititalValues = {}, setPostForm }) => {
         <Button
           icon={icons.success}
           title="Опубликовать"
-          disabled={isNotComplete}
+          disabled={isFormUnfilled}
         />
       </div>
     </FormStyled>

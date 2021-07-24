@@ -30,7 +30,7 @@ const postsSlice = createSlice({
 
 export const posts = postsSlice.reducer;
 
-const { setIsPending, setPosts } = postsSlice.actions;
+export const { setIsPending, setPosts } = postsSlice.actions;
 
 // THUNKS
 

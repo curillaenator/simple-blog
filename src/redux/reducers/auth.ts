@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { batch } from "react-redux";
 import { authApi } from "../../api/api";
 
+import { setPosts } from "./posts";
+
 import { guest } from "../../fixedcontent/fixedcontent";
 
 import type { IUser, TThunk } from "../../types/types";
@@ -63,6 +65,7 @@ export const logOut = (): TThunk => async (dispatch) => {
   if (isLogOut) {
     batch(() => {
       dispatch(setUser(guest));
+      dispatch(setPosts([]));
     });
   }
 };
