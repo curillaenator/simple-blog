@@ -1,31 +1,13 @@
 import firebase from "firebase/app";
-import { auth, db } from "./firebase";
+import { auth, db, storage } from "./firebase";
 
 import { guest } from "../fixedcontent/fixedcontent";
 
-import type { IPosts, IUser } from "../types/types";
-
-import image1 from "../assets/images/image1.jpg";
-// import image2 from "../assets/images/image2.jpg";
-
-const text =
-  "React (иногда React.js или ReactJS) — JavaScript-библиотека[4] с открытым исходным кодом для разработки пользовательских интерфейсов. React разрабатывается и поддерживается Facebook, Instagram и сообществом отдельных разработчиков и корпораций[5][6][7]. React может использоваться для разработки одностраничных и мобильных приложений. Его цель — предоставить высокую скорость, простоту и масштабируемость. В качестве библиотеки для разработки пользовательских интерфейсов React часто используется с другими библиотеками, такими как MobX, Redux и GraphQL[8].";
-
-const fakePosts: IPosts[] = new Array(3).fill(0).map((_, i) => ({
-  id: `postid${i}`,
-  title: `post #${i}`,
-  text: text,
-  headPhoto: image1,
-  date: "20 Июля 2021",
-}));
+import type { INewPost, IPosts, IUser } from "../types/types";
 
 // FIREBASE API
 
-export const api = {
-  getPosts(): Promise<IPosts[]> {
-    return new Promise((resolve) => resolve(fakePosts));
-  },
-
+export const authApi = {
   logOut(): Promise<boolean> {
     return new Promise((resolve) => {
       auth.signOut();
@@ -75,6 +57,83 @@ export const api = {
       }
 
       return resolve(false);
+    });
+  },
+};
+
+export const storageApi = {
+  uploadImage(path: string, image: File): Promise<string> {
+    return new Promise((resolve) => {
+      const imageMeta = { cacheControl: "public,max-age=7200" };
+
+      const uploadTask = storage.ref().child(path).put(image, imageMeta);
+
+      uploadTask.on(
+        "state_changed",
+        (progress) => {},
+        (error) => resolve("error"),
+        () => resolve("success")
+      );
+    });
+  },
+
+  getImage(path: string): Promise<string> {
+    return new Promise(async (resolve) => {
+      const url: string = await storage.ref().child(path).getDownloadURL();
+      resolve(url);
+    });
+  },
+};
+
+export const postsApi = {
+  createNewPost(userID: string, payload: INewPost): Promise<IPosts | null> {
+    return new Promise((resolve) => {
+      const postID = db.ref("posts").push().key;
+      //@ts-ignore
+      const image = payload.headPhoto;
+      //@ts-ignore
+      const path = `${userID}/posts/${postID}/images/head/${payload.headPhoto.name}`;
+
+      const newPost: IPosts = {
+        //@ts-ignore
+        id: postID,
+        title: payload.title,
+        text: payload.text,
+        headPhoto: path,
+        date: `${Date.now()}`,
+      };
+
+      // UPLOAD IMAGE TO STORAGE
+      //@ts-ignore
+      const imagePromise = storageApi.uploadImage(path, image);
+
+      // CREATE POST IN DB
+      const postPromise: Promise<string> = new Promise((rslv) => {
+        const onUpd = (err: any) => (err ? rslv("error") : rslv("success"));
+
+        db.ref(`posts/${postID}`).update(newPost, onUpd);
+      });
+
+      // RESOLVE NEW POST FOR STATE UPDATE
+      Promise.all([imagePromise, postPromise]).then((result: string[]) => {
+        result.includes("error") ? resolve(null) : resolve(newPost);
+      });
+    });
+  },
+
+  getPosts(): Promise<IPosts[]> {
+    return new Promise(async (resolve) => {
+      const postsSnap = await db.ref("posts").once("value");
+
+      //@ts-ignore
+      const postsArray: IPosts[] = Object.values(postsSnap.val()).reverse();
+
+      const postsPromises = postsArray.map(async (post: IPosts) => ({
+        ...post,
+        headPhoto: await storageApi.getImage(post.headPhoto),
+      }));
+
+      Promise.all(postsPromises).then((posts) => resolve(posts));
     });
   },
 };

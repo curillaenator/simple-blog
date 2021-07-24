@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
+import { useAppDispatch } from "../../../redux/hooks/hooks";
+
 import { Button } from "../../buttons/button/Button";
 import { ImageInput } from "../../inputs/image/ImageInput";
 import { TextInput } from "../../inputs/text/TextInput";
 import { AreaInput } from "../../inputs/area/AreaInput";
 
-import { colors } from "../../../utils/colors";
+import { createAuthoredPost } from "../../../redux/reducers/posts";
+
 import { icons } from "../../../assets/icons/icons";
+import { colors } from "../../../utils/colors";
 import { resizeImage } from "../../../utils/functions";
 
 import type { FC } from "react";
@@ -20,10 +24,11 @@ interface IImageHeadStyled {
 const ImageHeadStyled = styled.div<IImageHeadStyled>`
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   height: ${({ image }) => (image ? "10rem" : "unset")};
   margin-bottom: 1rem;
   padding-top: ${({ image }) => (image ? "0" : "1rem")};
+  padding-bottom: ${({ image }) => (image ? "1rem" : "0")};
 
   .headimage {
     position: absolute;
@@ -65,9 +70,12 @@ const FormStyled = styled.form`
 
 interface IPostForm {
   inititalValues?: IPosts;
+  setPostForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PostForm: FC<IPostForm> = ({ inititalValues = {} }) => {
+const PostForm: FC<IPostForm> = ({ inititalValues = {}, setPostForm }) => {
+  const dispatch = useAppDispatch();
+
   const [headPhoto, setHeadPhoto] = useState(null);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
@@ -83,16 +91,14 @@ const PostForm: FC<IPostForm> = ({ inititalValues = {} }) => {
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const titleTrimmed = title.trim();
-    const textTrimmed = text.trim().replace(/\n/g, "<br/>");
-
     const payload = {
       headPhoto,
-      title: titleTrimmed,
-      text: textTrimmed,
+      title: title.trim(),
+      text: text.trim().replace(/\n/g, "<br/>"),
     };
 
-    console.log(payload);
+    dispatch(createAuthoredPost(payload));
+    setPostForm(false);
   };
 
   const imageHandler = async (files: FileList) => {

@@ -5,7 +5,7 @@ import type { TState } from "../redux/store";
 // COMMON
 
 export interface IUser {
-  id: string | null;
+  id: string;
   username?: string;
   avatar?: string;
   role: string;
@@ -14,13 +14,15 @@ export interface IUser {
 export interface INewPost {
   title: string;
   text: string;
-  headPhoto: string;
+  headPhoto: File | null;
 }
 
-// single post
-export interface IPosts extends INewPost {
+export interface IPosts {
   id: string;
+  title: string;
+  text: string;
   date: string;
+  headPhoto: string;
 }
 
 // universal dropdown option
@@ -41,13 +43,6 @@ export interface ITextInput {
 }
 
 // REDUX & STATE
-
-// main reducer initial state
-export interface IInitialState {
-  initialized: boolean;
-  user: IUser;
-  posts: IPosts[];
-}
 
 export type TReducer<S, A = AnyAction> = (state: S, action: A) => S; // localc state reducer
 export type TAction<P> = (payload: P) => { type: string; payload: P }; // action creator

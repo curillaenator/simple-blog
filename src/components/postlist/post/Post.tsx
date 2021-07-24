@@ -1,11 +1,13 @@
-import { FC } from "react";
-import type { IPosts } from "../../../types/types";
+import parse from "html-react-parser";
 import styled from "styled-components";
 
 import { ButtonIcon } from "../../buttons/buttonIcon/ButtonIcon";
 
 import { colors } from "../../../utils/colors";
 import { icons } from "../../../assets/icons/icons";
+
+import type { FC } from "react";
+import type { IPosts } from "../../../types/types";
 
 const PostStyled = styled.div`
   border-radius: 2rem;
@@ -76,6 +78,7 @@ const Post: FC<IPostComp> = ({ post }) => {
     <PostStyled>
       <img
         className="image"
+        //@ts-ignore
         src={post.headPhoto}
         alt={post.title}
         draggable={false}
@@ -92,7 +95,7 @@ const Post: FC<IPostComp> = ({ post }) => {
       </div>
 
       <div className="body">
-        <p>{post.text}</p>
+        <p>{parse(post.text)}</p>
       </div>
 
       <div className="gallery"></div>

@@ -1,68 +1,45 @@
+import { createSlice } from "@reduxjs/toolkit";
 import { batch } from "react-redux";
-import { api } from "../../api/api";
+import { authApi } from "../../api/api";
 
 import { guest } from "../../fixedcontent/fixedcontent";
 
-import type { Reducer, AnyAction } from "@reduxjs/toolkit";
-import type {
-  IPosts,
-  INewPost,
-  IUser,
-  IInitialState,
-  TAction,
-  TThunk,
-} from "../../types/types";
+import type { IUser, TThunk } from "../../types/types";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
-const SET_INITIALIZE = "main/SET_INITIALIZE";
-const SET_CURRENT_USER = "main/SET_CURRENT_USER";
-const SET_POSTS = "main/SET_POSTS";
+interface IMainState {
+  initialized: boolean;
+  user: IUser;
+}
 
-const initialState: IInitialState = {
+const initialState: IMainState = {
   initialized: false,
   user: guest,
-  posts: [],
 };
 
-export const main: Reducer<IInitialState, AnyAction> = (
-  state = initialState,
-  action
-) => {
-  switch (action.type) {
-    case SET_INITIALIZE:
-      return { ...state, initialized: action.payload };
-
-    case SET_CURRENT_USER:
-      return { ...state, user: action.payload };
-
-    case SET_POSTS:
-      return { ...state, posts: action.payload };
-
-    default:
-      return state;
-  }
-};
-
-// ACTION CREATORS
-
-const setInitialize: TAction<boolean> = (payload) => ({
-  type: SET_INITIALIZE,
-  payload,
+const mainSlice = createSlice({
+  name: "main",
+  initialState,
+  reducers: {
+    setInitialize: (state, action: PayloadAction<boolean>) => {
+      state.initialized = action.payload;
+    },
+    setUser: (state, action: PayloadAction<IUser>) => {
+      state.user = action.payload;
+    },
+  },
 });
 
-const setUser: TAction<IUser> = (payload) => ({
-  type: SET_CURRENT_USER,
-  payload,
-});
+export const main = mainSlice.reducer;
 
-const setPosts: TAction<IPosts[]> = (payload) => ({
-  type: SET_POSTS,
-  payload,
-});
+// ACTIONS
+
+const { setInitialize, setUser } = mainSlice.actions;
 
 // THUNKS
 
 export const initializeApp = (): TThunk => async (dispatch) => {
-  const user: IUser = await api.isUserAuthed();
+  const user: IUser = await authApi.isUserAuthed(); // if not returns "guest"
 
   batch(() => {
     dispatch(setUser(user));
@@ -71,8 +48,8 @@ export const initializeApp = (): TThunk => async (dispatch) => {
 };
 
 export const signInWithGoogle = (): TThunk => async (dispatch) => {
-  const user: IUser = await api.signInWithGoogle();
-  const isNewUser: boolean = await api.createUserInDB(user);
+  const user: IUser = await authApi.signInWithGoogle();
+  const isNewUser: boolean = await authApi.createUserInDB(user);
   console.log(isNewUser);
 
   batch(() => {
@@ -81,23 +58,11 @@ export const signInWithGoogle = (): TThunk => async (dispatch) => {
 };
 
 export const logOut = (): TThunk => async (dispatch) => {
-  const isLogOut: boolean = await api.logOut();
+  const isLogOut: boolean = await authApi.logOut();
 
   if (isLogOut) {
     batch(() => {
       dispatch(setUser(guest));
     });
   }
-};
-
-export const getAuthoredPosts = (): TThunk => async (dispatch) => {
-  const posts: IPosts[] = await api.getPosts();
-
-  batch(() => {
-    dispatch(setPosts(posts));
-  });
-};
-
-export const createAuthoredPost = (payload: INewPost): TThunk => async (dispatch) => {
-
 };

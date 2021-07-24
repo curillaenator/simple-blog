@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 
+import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
+
+import { Loader } from "../loader/Loader";
 import Post from "./post";
 import Cta from "./cta";
 import PostForm from "./postform";
 
-import type { FC } from "react";
-import type { IPosts, INewPost } from "../../types/types";
+import { getAuthoredPosts } from "../../redux/reducers/posts";
 
 const PostListStyled = styled.section`
   .attention {
@@ -21,16 +23,17 @@ const PostListStyled = styled.section`
   }
 `;
 
-interface IPostList {
-  posts: IPosts[];
-  getAuthoredPosts: () => void;
-  createAuthoredPost: (payload: INewPost) => void;
-}
+const PostList: FC = () => {
+  // console.log("render");
 
-const PostList: FC<IPostList> = ({ posts, getAuthoredPosts }) => {
+  const dispatch = useAppDispatch();
+  const { posts, isPending } = useAppSelector((state) => state.posts);
+
   const [postForm, setPostForm] = useState(false);
 
-  useEffect(() => getAuthoredPosts(), [posts, getAuthoredPosts]);
+  useEffect(() => dispatch(getAuthoredPosts()), [dispatch]);
+
+  if (isPending) return <Loader />;
 
   return (
     <PostListStyled>
@@ -40,8 +43,7 @@ const PostList: FC<IPostList> = ({ posts, getAuthoredPosts }) => {
 
       {postForm && (
         <div className="postform">
-          {" "}
-          <PostForm />
+          <PostForm setPostForm={setPostForm} />
         </div>
       )}
 

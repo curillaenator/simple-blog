@@ -4,11 +4,6 @@ import styled from "styled-components";
 
 import { Loader } from "../../components/loader/Loader";
 
-import {
-  getAuthoredPosts,
-  createAuthoredPost,
-} from "../../redux/reducers/main";
-
 import type { FC } from "react";
 import type { TState } from "../../redux/store";
 
@@ -19,12 +14,7 @@ const PageStyled = styled.div``;
 
 type TBlog = ConnectedProps<typeof connector>;
 
-const Blog: FC<TBlog> = ({
-  user,
-  posts,
-  getAuthoredPosts,
-  createAuthoredPost,
-}) => {
+const Blog: FC<TBlog> = ({ user }) => {
   return (
     <PageStyled>
       {user.role === "guest" && (
@@ -36,11 +26,7 @@ const Blog: FC<TBlog> = ({
       {user.role !== "guest" && (
         <Suspense fallback={<Loader />}>
           <section className="blog">
-            <PostList
-              posts={posts}
-              getAuthoredPosts={getAuthoredPosts}
-              createAuthoredPost={createAuthoredPost}
-            />
+            <PostList />
           </section>
         </Suspense>
       )}
@@ -50,10 +36,9 @@ const Blog: FC<TBlog> = ({
 
 const mstp = (state: TState) => ({
   user: state.main.user,
-  posts: state.main.posts,
 });
 
-const mdtp = { getAuthoredPosts, createAuthoredPost };
+const mdtp = {};
 
 const connector = connect(mstp, mdtp);
 

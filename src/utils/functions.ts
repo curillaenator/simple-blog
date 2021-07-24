@@ -6,7 +6,7 @@ export const resizeImage = (file: File): Promise<File> =>
       file,
       1280,
       1280,
-      "JPEG",
+      "WEBP",
       60,
       0,
       //@ts-ignore
