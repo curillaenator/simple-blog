@@ -55,7 +55,7 @@ export const createAuthoredPost = (payload: INewPost): TThunk => {
 
     if (!newPost) {
       dispatch(setIsPending(false));
-      return console.log("Post edit error");
+      return console.log("Post create error");
     } // TODO handle errors in UI
 
     if (newPost) {
@@ -80,7 +80,7 @@ export const removeAuthoredPost = (post: IPosts): TThunk => {
 
     if (!postRemoved) {
       dispatch(setIsPending(false));
-      return console.log("Post create error");
+      return console.log("Post delete error");
     } // TODO handle errors in UI
 
     if (postRemoved) {

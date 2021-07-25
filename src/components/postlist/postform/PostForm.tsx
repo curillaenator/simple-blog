@@ -135,6 +135,8 @@ const PostForm: FC<IPostForm> = ({
   };
 
   const handleImageResize = async (files: FileList) => {
+    if (!files.length) return;
+
     const image: File = await resizeImage(files[0]);
     //@ts-ignore
     setHeadPhoto(image);

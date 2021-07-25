@@ -82,9 +82,23 @@ export const storageApi = {
       storage
         .refFromURL(url)
         .delete()
-        .then(() => {
-          resolve("success");
-        })
+        .then(() => resolve("success"))
+        .catch(() => resolve("error"));
+    });
+  },
+
+  removeImageList(path: string): Promise<string> {
+    return new Promise(async (resolve) => {
+      const items = await storage
+        .ref()
+        .child(path)
+        .listAll()
+        .then((res) => res.items);
+
+      const removePromises = items.map((item) => item.delete());
+
+      Promise.all(removePromises)
+        .then(() => resolve("success"))
         .catch(() => resolve("error"));
     });
   },
@@ -104,7 +118,7 @@ export const postsApi = {
       //@ts-ignore
       const image = payload.headPhoto;
       //@ts-ignore
-      const path = `${userID}/posts/${postID}/images/head/${payload.headPhoto.name}`;
+      const path = `${userID}/posts/${postID}/images/head/${image.name}`;
 
       const newPost: IPosts = {
         //@ts-ignore
@@ -134,9 +148,10 @@ export const postsApi = {
   },
 
   removePost(userID: string, post: IPosts): Promise<string | null> {
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
       // remove headPhoto from storage
-      const imgPromise = await storageApi.removeImage(post.headPhoto);
+      const path = `${userID}/posts/${post.id}/images/head`;
+      const imgPromise = storageApi.removeImageList(path);
 
       // remove post from db
       const postPromise: Promise<string> = new Promise((res) => {
@@ -146,9 +161,7 @@ export const postsApi = {
 
       // resolve all removes
       Promise.all([imgPromise, postPromise]).then((res) => {
-        if (res.includes("error")) return resolve(null);
-
-        resolve("success");
+        res.includes("error") ? resolve(null) : resolve("success");
       });
     });
   },
