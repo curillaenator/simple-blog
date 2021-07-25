@@ -134,7 +134,7 @@ const Post: FC<IPostComp> = ({ post }) => {
           </div>
 
           <div className="body">
-            <p>{parse(post.text)}</p>
+            <div>{parse(post.text)}</div>
           </div>
 
           <div className="gallery"></div>
