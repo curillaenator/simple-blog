@@ -1,10 +1,11 @@
 import parse from "html-react-parser";
 import styled from "styled-components";
 
-import { useAppDispatch } from "../../../hooks/hooks";
+import { useAppDispatch, useToggle } from "../../../hooks/hooks";
 
 import { ButtonIcon } from "../../buttons/buttonIcon/ButtonIcon";
 import { Dropdown } from "../../dropdown/Dropdown";
+import PostForm from "../postform/PostForm";
 
 import { removeAuthoredPost } from "../../../redux/reducers/posts";
 
@@ -20,11 +21,6 @@ const PostStyled = styled.div`
   background-color: ${colors.backGrayLight};
   overflow: hidden;
   padding-bottom: 1rem;
-  margin-bottom: 1rem;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
 
   .image {
     width: 100%;
@@ -75,11 +71,21 @@ const PostStyled = styled.div`
   }
 `;
 
+const PostContainer = styled.div`
+  margin-bottom: 1rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
 interface IPostComp {
   post: IPosts;
 }
 
 const Post: FC<IPostComp> = ({ post }) => {
+  const [edit, toggleEdit] = useToggle(false);
+
   const dispatch = useAppDispatch();
 
   const removePostOptions: IDropOption[] = [
@@ -100,41 +106,49 @@ const Post: FC<IPostComp> = ({ post }) => {
   ];
 
   return (
-    <PostStyled>
-      <img
-        className="image"
-        //@ts-ignore
-        src={post.headPhoto}
-        alt={post.title}
-        draggable={false}
-      />
+    <PostContainer>
+      {edit && (
+        <PostForm edit inititalValues={post} closePostForm={toggleEdit} />
+      )}
 
-      <div className="head">
-        <h3 className="head_title font_condensed">{post.title}</h3>
+      {!edit && (
+        <PostStyled>
+          <img
+            className="image"
+            //@ts-ignore
+            src={post.headPhoto}
+            alt={post.title}
+            draggable={false}
+          />
 
-        <div className="head_buttons">
-          <Dropdown options={removePostOptions}>
-            <ButtonIcon icon={icons.trash} danger />
-          </Dropdown>
+          <div className="head">
+            <h3 className="head_title font_condensed">{post.title}</h3>
 
-          {/* <ButtonIcon icon={icons.pencil} /> */}
-        </div>
-      </div>
+            <div className="head_buttons">
+              <Dropdown options={removePostOptions}>
+                <ButtonIcon icon={icons.trash} danger />
+              </Dropdown>
 
-      <div className="body">
-        <p>{parse(post.text)}</p>
-      </div>
+              <ButtonIcon icon={icons.pencil} handler={toggleEdit} />
+            </div>
+          </div>
 
-      <div className="gallery"></div>
+          <div className="body">
+            <p>{parse(post.text)}</p>
+          </div>
 
-      <div className="legs">
-        <div className="legs_date">{timestampToDate(post.date)}</div>
+          <div className="gallery"></div>
 
-        {/* <div className="legs_buttons">
+          <div className="legs">
+            <div className="legs_date">{timestampToDate(post.date)}</div>
+
+            {/* <div className="legs_buttons">
           <ButtonIcon icon={icons.like} />
         </div> */}
-      </div>
-    </PostStyled>
+          </div>
+        </PostStyled>
+      )}
+    </PostContainer>
   );
 };
 

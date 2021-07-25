@@ -64,7 +64,7 @@ const ButtonStyled = styled.button<IButtonStyled>`
 `;
 
 interface IButton {
-  title?: string;
+  title: string;
   icon?: ReactNode;
   active?: boolean;
   disabled?: boolean;
@@ -72,11 +72,11 @@ interface IButton {
 }
 
 export const Button: FC<IButton> = ({
-  title = "Кнопка",
+  title,
   icon,
   active = false,
   disabled = false,
-  handler = () => console.log("btn_prim"),
+  handler = () => {},
 }) => {
   return (
     <ButtonStyled

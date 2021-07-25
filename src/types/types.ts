@@ -14,7 +14,12 @@ export interface IUser {
 export interface INewPost {
   title: string;
   text: string;
-  headPhoto: File | null;
+  headPhoto: File | string | null;
+}
+
+export interface IEditPost extends INewPost {
+  id: string;
+  date: string;
 }
 
 export interface IPosts {

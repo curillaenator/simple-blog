@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { useAppDispatch } from "../../../hooks/hooks";
@@ -8,14 +8,17 @@ import { ImageInput } from "../../inputs/image/ImageInput";
 import { TextInput } from "../../inputs/text/TextInput";
 import { AreaInput } from "../../inputs/area/AreaInput";
 
-import { createAuthoredPost } from "../../../redux/reducers/posts";
+import {
+  createAuthoredPost,
+  editAuthoredPost,
+} from "../../../redux/reducers/posts";
 
 import { icons } from "../../../assets/icons/icons";
 import { colors } from "../../../utils/colors";
-import { resizeImage } from "../../../utils/functions";
+import { resizeImage, urlFromStringOrFile } from "../../../utils/functions";
 
 import type { FC } from "react";
-import type { IPosts } from "../../../types/types";
+import type { IPosts, INewPost, IEditPost } from "../../../types/types";
 
 interface IImageHeadStyled {
   image: boolean;
@@ -63,25 +66,41 @@ const FormStyled = styled.form`
   }
 
   .buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     margin-bottom: 1rem;
     padding: 0 1rem;
   }
 `;
 
 interface IPostForm {
+  edit?: boolean;
   inititalValues?: IPosts;
   closePostForm: () => void;
 }
 
-const PostForm: FC<IPostForm> = ({ inititalValues = {}, closePostForm }) => {
+const PostForm: FC<IPostForm> = ({
+  edit = false,
+  inititalValues,
+  closePostForm,
+}) => {
   const dispatch = useAppDispatch();
 
   const [headPhoto, setHeadPhoto] = useState(null);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
-  const [isFormUnfilled, setIsFormUnfilled] = useState(true);
+  useEffect(() => {
+    if (inititalValues) {
+      setTitle(inititalValues.title);
+      setText(inititalValues.text.replace(/<br ?\/?>/g, "\n"));
+      //@ts-ignore
+      setHeadPhoto(inititalValues.headPhoto);
+    }
+  }, [inititalValues]);
 
+  const [isFormUnfilled, setIsFormUnfilled] = useState(true);
   useEffect(() => {
     if (!headPhoto || !title || !text) return setIsFormUnfilled(true);
     if (headPhoto && title && text) return setIsFormUnfilled(false);
@@ -90,17 +109,32 @@ const PostForm: FC<IPostForm> = ({ inititalValues = {}, closePostForm }) => {
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const payload = {
-      headPhoto,
-      title: title.trim(),
-      text: text.trim().replace(/\n/g, "<br/>"),
-    };
+    if (edit && inititalValues) {
+      const editPostPayload: IEditPost = {
+        id: inititalValues.id,
+        headPhoto,
+        title: title.trim(),
+        text: text.trim().replace(/\n/g, "<br/>"),
+        date: inititalValues.date,
+      };
 
-    dispatch(createAuthoredPost(payload));
+      dispatch(editAuthoredPost(editPostPayload));
+    }
+
+    if (!edit) {
+      const newPostPayload: INewPost = {
+        headPhoto,
+        title: title.trim(),
+        text: text.trim().replace(/\n/g, "<br/>"),
+      };
+
+      dispatch(createAuthoredPost(newPostPayload));
+    }
+
     closePostForm();
   };
 
-  const imageHandler = async (files: FileList) => {
+  const handleImageResize = async (files: FileList) => {
     const image: File = await resizeImage(files[0]);
     //@ts-ignore
     setHeadPhoto(image);
@@ -113,7 +147,7 @@ const PostForm: FC<IPostForm> = ({ inititalValues = {}, closePostForm }) => {
           {!!headPhoto && (
             <img
               className="headimage"
-              src={URL.createObjectURL(headPhoto)}
+              src={urlFromStringOrFile(headPhoto)}
               alt="HeadPhoto"
             />
           )}
@@ -122,7 +156,7 @@ const PostForm: FC<IPostForm> = ({ inititalValues = {}, closePostForm }) => {
             <ImageInput
               name="image"
               id="post_head_image"
-              imageHandler={imageHandler}
+              imageHandler={handleImageResize}
             />
           </div>
         </ImageHeadStyled>
@@ -149,9 +183,13 @@ const PostForm: FC<IPostForm> = ({ inititalValues = {}, closePostForm }) => {
       <div className="buttons">
         <Button
           icon={icons.success}
-          title="Опубликовать"
+          title={edit ? "Сохранить" : "Опубликовать"}
           disabled={isFormUnfilled}
         />
+
+        {edit && (
+          <Button icon={icons.back} title="Отмена" handler={closePostForm} />
+        )}
       </div>
     </FormStyled>
   );

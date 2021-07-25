@@ -3,7 +3,7 @@ import { auth, db, storage } from "./firebase";
 
 import { guest } from "../fixedcontent/fixedcontent";
 
-import type { INewPost, IPosts, IUser } from "../types/types";
+import type { INewPost, IEditPost, IPosts, IUser } from "../types/types";
 
 // FIREBASE API
 
@@ -150,6 +150,32 @@ export const postsApi = {
 
         resolve("success");
       });
+    });
+  },
+
+  editPost(userID: string, post: IEditPost): Promise<IPosts | null> {
+    return new Promise(async (resolve) => {
+      // GET HEADPHOTO PREV PATH
+      const pathSnap = await db
+        .ref(`posts/${userID}/${post.id}/headPhoto`)
+        .once("value");
+
+      // POST OBJ IF HEADPHOTO UNUPDATED
+      const editPost: IPosts = { ...post, headPhoto: pathSnap.val() };
+
+      // HANDLE HEADPHOTO IF IT UPDATED
+      if (typeof post.headPhoto !== "string") {
+        //@ts-ignore
+        const newPath = `${userID}/posts/${post.id}/images/head/${post.headPhoto.name}`;
+        //@ts-ignore
+        await storageApi.uploadImage(newPath, post.headPhoto);
+
+        editPost.headPhoto = newPath;
+      }
+
+      // UPDATE POST IN DB
+      const onUpd = (err: any) => (err ? resolve(null) : resolve(editPost));
+      db.ref(`posts/${userID}/${post.id}`).update(editPost, onUpd);
     });
   },
 

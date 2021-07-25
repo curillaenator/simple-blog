@@ -78,7 +78,7 @@ export const ButtonGhost: FC<IButtonGhost> = ({
   icon,
   color = colors.fontDark,
   danger = false,
-  handler = () => console.log("btn_ghost"),
+  handler = () => {},
 }) => {
   return (
     <StyledButton color={color} onClick={handler} danger={danger}>

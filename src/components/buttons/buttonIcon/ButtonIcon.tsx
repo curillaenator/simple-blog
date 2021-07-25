@@ -55,7 +55,7 @@ export const ButtonIcon: FC<IButtonIcon> = ({
   icon,
   disabled = false,
   danger = false,
-  handler = () => console.log("btn_icon"),
+  handler = () => {},
 }) => {
   return (
     <ButtonStyled disabled={disabled} danger={danger} onClick={handler}>

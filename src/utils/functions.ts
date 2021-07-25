@@ -40,3 +40,7 @@ export const loaderTitleGenerator = () => {
 
   return titles[randomize];
 };
+
+export const urlFromStringOrFile = (value: string | File | null): string => {
+  return typeof value === "string" ? value : URL.createObjectURL(value);
+};
